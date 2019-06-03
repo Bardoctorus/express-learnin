@@ -1,0 +1,54 @@
+{
+  "lads": {
+    "1": {
+      "id": "1",
+      "name": "shite",
+      "Age": 5,
+      "grumpy": true,
+      "morals": "not fucking likely sunshine"
+    },
+    "2": {
+      "id": "2",
+      "name": "beef",
+      "Age": 9,
+      "grumpy": false,
+      "morals": "can't even spell them, but harmless enough"
+    },
+    "3": {
+      "id": "3",
+      "name": "arsenipples",
+      "Age": 7,
+      "grumpy": false,
+      "morals": "Just an arse with some nipples, ya know"
+    },
+    "4": {
+      "id": "4",
+      "name": "Gimpylebber",
+      "Age": 65,
+      "grumpy": true,
+      "morals": "if you consider generally not bothering"
+    }
+  },
+  "lengs": {
+    "1": {
+      "name": "batta",
+      "length": 45,
+      "material": "wood"
+    },
+    "2": {
+      "name": "smash",
+      "length": 78,
+      "material": "wood"
+    },
+    "3": {
+      "name": "princess",
+      "length": 40,
+      "material": "scone"
+    },
+    "4": {
+      "name": "mickthecunt",
+      "length": 100,
+      "material": "geordies"
+    }
+  }
+}
