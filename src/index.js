@@ -1,9 +1,13 @@
+//just fpollowing this for a lark https://www.robinwieruch.de/node-express-server-rest-api/
+
 import 'dotenv/config';
 import cors from 'cors';
 import bodyParser from 'body-parser';
 import uuidv4 from 'uuid/v4';
 import express from 'express';
 import fs from 'fs';
+import models from './models';
+
 
 
 const app = express();
@@ -11,25 +15,41 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
-let rawlads = fs.readFileSync('mansandlengs.json');
-let madlads = JSON.parse(rawlads);
+// by moving the data into a separate models dir we
+// make it distinct from the main index. 
+// models could  be a db interface eventually
+app.use((req,res,next) => {
+req.context = {
+    models,
+    me: models.users[1],
+};
+next();
+});
+
+
 
 
 //----GETTA
 
-app.get ('/lads', (req,res) => {
-   return res.send(Object.values(madlads.lads));
+
+
+app.get('/session', (req, res) => {
+    return res.send(req.context.models.users[req.context.me.id]);
 });
 
-app.get ('/lads/:userId', (req,res) => {
-    return res.send(madlads.lads[req.params.userId]);
+app.get ('/users', (req,res) => {
+   return res.send(Object.values(req.context.models.users));
 });
 
-app.get ('/lengs', (req, res) =>{
-    return res.send(Object.values(madlads.lengs));
+app.get ('/users/:userId', (rlseq,res) => {
+    return res.send(req.context.models.users[req.params.userId]);
 });
-app.get ('/lengs/:lengId', (req, res) =>{
-    return res.send(madlads.lengs[req.params.userId]);
+
+app.get ('/messages', (req, res) => {
+    return res.send(Object.values(req.context.model.messages));
+});
+app.get ('/messages/:messageId', (req, res) =>{
+    return res.send(req.context.model.messages[req.params.messageId]);
 });
 
 //---POSTY
@@ -39,18 +59,20 @@ app.post('/users', (req,res)=> {
     return res.send('posty, manna posty');
 });
 
-app.post('/lads', (req,res)=>{
+app.post('/messages', (req,res)=>{
     console.log(req.body);
     const id = uuidv4();
-    const payload = {
+    const message = {
         id,
-        name: JSON.parse(req.body),
+        text: req.body.text,
+        userId: req.context.me.id,
     };
-    madlads.lads[id] = payload;
-    console.log(madlads);
-    return res.send(payload);
-});
 
+
+    req.context.models.messages[id] = message;
+    console.log(message);
+    return res.send(message);
+});
 
 
 //---puttaputta
@@ -68,6 +90,18 @@ app.delete('/users/:userId', (req,res)=> {
         `users iz dead jim user/${req.params.userId}`,
     );
 });
+
+app.delete('/messages/:messageId', (req, res) => {
+    const {
+        [req.params.messageId]: message,
+        ...otherMessages
+    } = req.context.models.messages;
+
+
+    req.context.models.messages = otherMessages;
+    console.log(messages);
+    return res.send(message);
+})
 
 
 
